@@ -1,3 +1,193 @@
+# React Native Introduction
+[React Native](https://facebook.github.io/react-native/)
+
+
+## Initial Setup
+
+### Prerequisites
+
+- Node
+- [Expo XDE for Mac](https://expo.io/tools)
+- [Expo iOS Client on the App Store](https://itunes.apple.com/app/apple-store/id982107779?ct=www&mt=8)
+
+### Installing React Native
+
+```bash
+npm install -g create-react-native-app
+```
+
+
+## Creating a project
+
+```bash
+create-react-native-app my-project
+cd my-project
+yarn start (or npm start)
+```
+
+
+## What is Expo?
+You’re going to see the name `Expo` or `Exponent` thrown around a lot. What is it? Expo is an Open Source Framework and Toolset for building React Native apps. You can kind of think of it it like the relationship between Ruby and Ruby on Rails. It isn’t necessary to build React Native apps, but it makes a lot of things easier, and the default app we’ll create uses it.
+
+
+## Default project: high-level
+
+**Checkout Git tag 1**
+
+### .babelrc
+Typical Babel config, allows fancy new Javascript features and turns your .jsx files into standard Javascript.
+
+### .flowconfig
+Flow is a static type checker for Javascript. You mostly don’t need to know about it or what it does, but it analyzes your code and checks for potential bugs depending on object types.
+
+### .gitignore
+Hides various files from Git
+
+### .watchmanconfig
+Watchman is the library React Native uses to watch your code for changes and update the app preview when things change.
+
+### App.js
+This is the top-level Javascript file for your app. Everything starts here, and this file will be used by both iOS and Android by default (you can also have separate base .js files for each if you want).
+
+### app.json
+Just some basic info for your app.
+
+### App.test.js
+Tests for your app. You can run these tests with `yarn test` or `npm test`. The tests are powered by Facebook’s [Jest](https://facebook.github.io/jest/) testing library.
+
+### package.json
+Typical stuff.
+
+### README.md
+An overly-verbose default README.
+
+
+## Start your app (if you haven’t already)
+
+- `yarn start` or `npm start`
+- Open the Expo XDE app on your Mac
+- Click on your project in Expo
+- Open the Expo app on your iPhone and scan the QR code that appeared in your terminal
+
+
+## Default project: App.js
+
+----
+#### Sidebar: JS Next syntax
+
+You’re going to see a lot of cutting-edge javascript syntax in react native projects and examples. Because React Native doesn’t need to worry about browser support, it can use whatever fancy features it wants.
+
+At the very least, you’re going to want to be familiar with Javascript [classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), how the [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) syntax for modules works, and also [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function). These will all come up fairly frequently, and are helpful to understand in general.
+---
+
+### Walking through App.js
+
+```js
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+```
+
+Here we’re importing React itself, and any individual React Native modules we use in this specific file. These two lines (or lines like them) will probably appear at the top of almost every file in your React Native project.
+
+```js
+export default class App extends React.Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <Text>Changes you make will automatically reload.</Text>
+        <Text>Shake your phone to open the developer menu.</Text>
+      </View>
+    );
+  }
+}
+```
+
+Other than the `export default` this is all pretty much React 101 code. We’re creating a new JS `Class` that uses `React.Component` as it’s base, and has only one method: `render`.
+
+`render()` is the only method that a React Component is required to have, and it returns JSX that describes what should be rendered to the screen for the component.
+
+All React components need to render one and only one wrapper element: here (and most of the time in React Native) the wrapper is a `<View>` element. When using React in a browser it is typically just a `<div>` element.
+
+Within the `<View>` we’re rendering three different `<Text>` elements, which behind the scenes are creating native iOS or Android text elements.
+
+The `<View>` also includes some styles using `StyleSheet`, which allows you to define pseudo-CSS styles that will be applied to the element. 
+
+---
+#### Sidebar: Capitalization in React/React Native
+
+In HTML and CSS you’re probably used to naming things with hyphens. Because React is all javascript, we can’t use hyphens for naming, and instead it’s typical to use camel-casing just like you would in javascript normally. So instead of `background-color` we use `backgroundColor`.
+
+---
+
+## Reorganization
+
+A React/React Native app is going to consist of a LOT of components, typically nested within each other, so it’s good to get into a habit of separating these components out into their own files and importing them as needed.
+
+Let’s see what it would take to move our base component out into it’s own file.
+
+**Checkout Git tag 2**
+
+Now if we look at `App.js` we can see that there is barely anything in the file anymore. We’re importing a new component from `./jsx/Home` and we’re only rendering that component in our base component.
+
+If we jump into `./jsx/Home` we see that almost all of the code that was previously in `App.js` has moved into this file.
+
+Here you can also see how easy it is for a React component to render a nested react component.
+
+
+## Passing data between React components: Props
+
+When a React component renders another React component, it’s common to need to pass data between them. This is done using what is called `props`, and they essentially look like attributes that you had to the child component when you’re rendering it.
+
+_Go through little example of passing props from App down to Home to change the text_
+
+
+## Adding simple interaction
+
+**Checkout Git tag 3**
+
+Here’s what changed:
+
+- We imported a few new React Components: `Button` and `Alert`
+- We’re now rendering a new `<Button>` component.
+- The `<Button>` component has a few required Props: `title` and `onPress`
+- The `onPress` prop just specifies a method on the current class that we want to trigger when the button is pressed.
+- We can see the use of `{` and `}` inside of our JSX code. This allows us to include javascript inside of JSX.
+
+
+## Basic Navigation
+
+iOS and Android have different navigation UIs, so for this demo we’ll be focusing on iOS and the `NavigatorIOS` component: [NavigatorIOS](https://facebook.github.io/react-native/docs/navigatorios.html)
+
+**Checkout Git tag 4**
+
+Here’s what changed:
+
+- `App.js` now imports `NavigatorIOS` and renders that instead of rendering the `Home` component directly.
+- The new `<NavigatorIOS>` component needs to include an additional route, which specifies a title and component to render when the app first loads.
+- The `Home` component now includes a button with an `onPress` event that “pushes” another component (in this case an `AnotherPage` component) onto the navigation stack.
+- When we click `Go to Another Page` the new component gets added to the navigation stack, and the navigator title bar automatically updates to reflect the new page. When we click the “back” button, the current components gets “popped” off of the navigation stack and we’re back where we started.
+
+## Fetching content from an API
+
+React Native is basically just javascript, so anything you can do in Javascript you can do in React Native.
+
+Let’s use `async/await` and `fetch` to fetch some data from a remote API and render it into our component.
+
+**Checkout Git tag 5**
+
+Here’s what changed:
+
+- We added a `constructor` method to our `AnotherPage` component. This is always called behind the scenes, but we can also specify it if we want to do some extra work when the component is first created.
+- In our constructor we specific the initial `state` of the component. `state` is a way to store some data within a component. In this case we’re using it to include default values while we wait for our API call to complete.
+- We have a new `componentDidMount` method on the component. This is a standard React lifecycle event that occurs when a component is first “mounted” but before it renders. This is typically where you would include custom JS that you want to fire as soon as the component is available. In this case, we’re using it to make an API request as soon as the component mounts. When the request completes, we use the data form the request to update the state.
+- Updating the state of a component always forces the component to immediately re-render. So in this case as soon as our API call completes and the new state is set, the component will re-render and we’ll see our new data.
+- We’re using an `async` function with the `fetch` api (new javascript fanciness) to wait for a Github API call to complete before returning a promise.
+
+---
+
+# Original Example Documentation
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
