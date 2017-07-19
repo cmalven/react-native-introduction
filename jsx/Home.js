@@ -1,13 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, Button, Alert, View } from 'react-native';
 
 export default class Home extends React.Component {
+  _handleButtonPress = () => {
+    Alert.alert(
+      'Button pressed!',
+      'Nice work pressing that button!',
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Text>Click the button below:</Text>
+        <Button
+          title="Press Me Now!"
+          onPress={this._handleButtonPress}
+        />
       </View>
     );
   }
