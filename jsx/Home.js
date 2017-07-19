@@ -1,22 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, Button, Alert, View } from 'react-native';
+import { StyleSheet, Text, Button, View } from 'react-native';
+import AnotherPage from './AnotherPage';
 
 export default class Home extends React.Component {
-  _handleButtonPress = () => {
-    Alert.alert(
-      'Button pressed!',
-      'Nice work pressing that button!',
-    );
-  };
+  _handleNextPress(route) {
+    this.props.navigator.push(route);
+  }
 
   render() {
+    const anotherPageRoute = {
+      component: AnotherPage,
+      title: 'Another Page'
+    };
+
     return (
       <View style={styles.container}>
-        <Text>Click the button below:</Text>
-        <Button
-          title="Press Me Now!"
-          onPress={this._handleButtonPress}
-        />
+        <Text>Current Page: { this.props.route.title }</Text>
+        <Button title="Go to Another Page" onPress={() => this._handleNextPress(anotherPageRoute)} />
       </View>
     );
   }
